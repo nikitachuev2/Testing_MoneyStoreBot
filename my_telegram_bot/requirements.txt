@@ -1,0 +1,171 @@
+
+## Базовый список зависимостей:
+
+python-telegram-bot==20.7
+# Основная библиотека для работы с Telegram Bot API
+
+# База данных и ORM
+SQLAlchemy==2.0.23
+psycopg2-binary==2.9.9
+alembic==1.13.1
+
+# Безопасность и аутентификация
+bcrypt==4.1.2
+PyJWT==2.8.0
+
+# Работа с переменными окружения и конфигурацией
+python-dotenv==1.0.0
+environs==10.1.0
+
+# Валидация данных
+email-validator==2.1.0
+phonenumbers==8.13.26
+
+# Работа с данными
+pandas==2.1.4
+openpyxl==3.1.2
+
+# Математические вычисления и визуализация
+numpy==1.26.2
+matplotlib==3.7.3
+
+# Работа с валютами и внешними API
+requests==2.31.0
+forex-python==1.8
+
+# Логирование
+loguru==0.7.2
+
+# Тестирование
+pytest==7.4.4
+pytest-asyncio==0.23.2
+
+# Дополнительные утилиты
+python-dateutil==2.8.2
+
+## Детальное описание зависимостей:
+
+### 1. Telegram Bot
+- python-telegram-bot==20.7
+  - Полная поддержка Telegram Bot API
+  - Асинхронные обработчики
+  - Современный интерфейс
+
+### 2. База данных
+- SQLAlchemy==2.0.23
+  - ORM для работы с базами данных
+  - Абстракция от конкретной БД
+- psycopg2-binary==2.9.9
+  - Драйвер для PostgreSQL
+- alembic==1.13.1
+  - Миграции базы данных
+  - Версионность схемы
+
+### 3. Безопасность
+- bcrypt==4.1.2
+  - Хеширование паролей
+  - Надежная защита учетных записей
+- PyJWT==2.8.0
+  - Работа с JWT токенами
+  - Аутентификация пользователей
+
+### 4. Конфигурация и переменные
+- python-dotenv==1.0.0
+  - Загрузка переменных из .env
+- environs==10.1.0
+  - Продвинутая работа с переменными окружения
+
+### 5. Валидация
+- email-validator==2.1.0
+  - Проверка корректности email
+- phonenumbers==8.13.26
+  - Работа с телефонными номерами
+
+### 6. Работа с данными
+- pandas==2.1.4
+  - Анализ и обработка данных
+- openpyxl==3.1.2
+  - Работа с Excel файлами
+
+### 7. Вычисления
+- numpy==1.26.2
+  - Математические операции
+- matplotlib==3.7.3
+  - Визуализация графиков
+  - Статистический анализ
+
+### 8. Внешние интеграции
+- requests==2.31.0
+  - HTTP-запросы
+- forex-python==1.8
+  - Конвертация валют
+  - Актуальные курсы
+
+### 9. Логирование
+- loguru==0.7.2
+  - Современное асинхронное логирование
+  - Гибкая настройка
+
+### 10. Тестирование
+- pytest==7.4.4
+  - Модульное тестирование
+- pytest-asyncio==0.23.2
+  - Тестирование асинхронного кода
+
+## Рекомендации по использованию:
+
+1. Создайте виртуальное окружение
+
+python -m venv venv
+source venv/bin/activate  # Linux/MacOS
+venv\Scripts\activate     # Windows
+
+2. Установите зависимости
+
+pip install -r requirements.txt
+
+3. Зафиксируйте текущие версии
+
+pip freeze > requirements.txt
+
+## Пример использования в коде:
+
+import os
+from dotenv import load_dotenv
+from telegram import Update
+from telegram.ext import Application, CommandHandler
+
+# Загрузка переменных окружения
+load_dotenv()
+
+# Получение токена из .env
+TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
+
+async def start(update: Update, context):
+    await update.message.reply_text('Привет!')
+
+def main():
+    application = Application.builder().token(TOKEN).build()
+    application.add_handler(CommandHandler("start", start))
+    application.run_polling()
+
+if __name__ == '__main__':
+    main()
+
+## Безопасность:
+
+1. Никогда не коммитьте токены
+2. Используйте .env
+3. Добавьте .env в .gitignore
+
+### Пример .env:
+
+TELEGRAM_BOT_TOKEN=ваш_токен_бота
+DATABASE_URL=postgresql://username:password@localhost/dbname
+
+### Пример .gitignore:
+
+venv/
+__pycache__/
+.env
+*.pyc
