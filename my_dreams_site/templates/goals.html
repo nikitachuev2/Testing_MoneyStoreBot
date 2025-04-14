@@ -1,0 +1,14 @@
+
+{% extends "base.html" %}
+{% block content %}
+<h2>Set Financial Goal</h2>
+<form method="POST">
+    {{ form.hidden_tag() }}
+    <div>
+        {{ form.target_amount.label }} {{ form.target_amount(size=32) }}<br>
+    </div>
+    <div>
+        {{ form.submit() }}
+    </div>
+</form>
+{% endblock %}
