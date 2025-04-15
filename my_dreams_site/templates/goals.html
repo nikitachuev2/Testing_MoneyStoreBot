@@ -7,11 +7,16 @@
     <title>Set Goals</title>
 </head>
 <body>
-    <h1>Set Goals</h1>
+    <h1>Установите ваши мечты и цели</h1>
+    <p>Определите свою мечту, указав её название и сумму, которую вы хотите накопить. Это шаг к достижению ваших финансовых целей!</p>
     <form method="POST">
         {{ form.hidden_tag() }}
+        <label for="dream_name">Название мечты:</label>
+        <input type="text" name="dream_name" required><br>
         {{ form.target_amount.label }} {{ form.target_amount(size=32) }}<br>
         {{ form.submit() }}
     </form>
+    <a href="{{ url_for('home') }}">Вернуться на главную страницу</a>
 </body>
 </html>
+

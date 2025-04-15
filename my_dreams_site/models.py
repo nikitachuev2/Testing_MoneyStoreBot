@@ -22,9 +22,24 @@ class Goal(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     target_amount = db.Column(db.Float, nullable=False)
     current_amount = db.Column(db.Float, default=0)
+    dream_name = db.Column(db.String(100), nullable=False)  # Поле для названия мечты
 
 class Contribution(db.Model):  # Модель для учета внесенных средств
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     amount = db.Column(db.Float, nullable=False)
     timestamp = db.Column(db.DateTime, default=db.func.current_timestamp())
+
+# Список популярных категорий для расходов
+POPULAR_CATEGORIES = [
+    'Еда',
+    'Транспорт',
+    'Развлечения',
+    'Одежда',
+    'Квартира',
+    'Коммунальные услуги',
+    'Образование',
+    'Путешествия',
+    'Здоровье',
+    'Спорт'
+]

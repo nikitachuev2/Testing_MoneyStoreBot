@@ -7,14 +7,13 @@
     <title>Expense Analysis</title>
 </head>
 <body>
-    <h1>Expense Analysis</h1>
-    <h2>Expenses Last Month</h2>
+    <h1>Анализ Ваших Расходов</h1>
+    <p>Здесь вы можете увидеть, как вы тратили свои деньги за последний месяц. Это важно для контроля бюджета!</p>
     <ul>
         {% for category, total in category_totals.items() %}
-            <li>{{ category }}: {{ total }}</li>
+            <li>Категория "{{ category }}": {{ total }} рублей</li>
         {% endfor %}
     </ul>
-    <a href="{{ url_for('home') }}">Back to Home</a>
+    <a href="{{ url_for('home') }}">Вернуться на главную страницу</a>
 </body>
 </html>
-

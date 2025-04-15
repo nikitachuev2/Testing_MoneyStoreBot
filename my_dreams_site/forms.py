@@ -15,13 +15,13 @@ class LoginForm(FlaskForm):
 
 class PurchaseForm(FlaskForm):
     category = StringField('Category', validators=[DataRequired()])
-
     amount = FloatField('Amount', validators=[DataRequired()])
     submit = SubmitField('Add Purchase')
 
 class GoalForm(FlaskForm):
-    target_amount = FloatField('Target Amount', validators=[DataRequired()])
-    submit = SubmitField('Set Goal')
+    dream_name = StringField('Название мечты', validators=[DataRequired()])  # Поле для названия мечты
+    target_amount = FloatField('Целевая сумма', validators=[DataRequired()])
+    submit = SubmitField('Установить Цель')
 
 class ContributionForm(FlaskForm):
     amount = FloatField('Amount', validators=[DataRequired()])
