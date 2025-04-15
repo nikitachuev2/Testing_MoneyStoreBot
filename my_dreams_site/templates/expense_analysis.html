@@ -1,0 +1,20 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Analysis</title>
+</head>
+<body>
+    <h1>Expense Analysis</h1>
+    <h2>Expenses Last Month</h2>
+    <ul>
+        {% for category, total in category_totals.items() %}
+            <li>{{ category }}: {{ total }}</li>
+        {% endfor %}
+    </ul>
+    <a href="{{ url_for('home') }}">Back to Home</a>
+</body>
+</html>
+

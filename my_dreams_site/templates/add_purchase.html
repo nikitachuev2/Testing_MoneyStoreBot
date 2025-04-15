@@ -1,17 +1,18 @@
 
-{% extends "base.html" %}
-{% block content %}
-<h2>Add Purchase</h2>
-<form method="POST">
-    {{ form.hidden_tag() }}
-    <div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Purchase</title>
+</head>
+<body>
+    <h1>Add Purchase</h1>
+    <form method="POST">
+        {{ form.hidden_tag() }}
         {{ form.category.label }} {{ form.category(size=32) }}<br>
-    </div>
-    <div>
         {{ form.amount.label }} {{ form.amount(size=32) }}<br>
-    </div>
-    <div>
         {{ form.submit() }}
-    </div>
-</form>
-{% endblock %}
+    </form>
+</body>
+</html>

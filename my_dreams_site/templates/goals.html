@@ -1,14 +1,17 @@
 
-{% extends "base.html" %}
-{% block content %}
-<h2>Set Financial Goal</h2>
-<form method="POST">
-    {{ form.hidden_tag() }}
-    <div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Set Goals</title>
+</head>
+<body>
+    <h1>Set Goals</h1>
+    <form method="POST">
+        {{ form.hidden_tag() }}
         {{ form.target_amount.label }} {{ form.target_amount(size=32) }}<br>
-    </div>
-    <div>
         {{ form.submit() }}
-    </div>
-</form>
-{% endblock %}
+    </form>
+</body>
+</html>

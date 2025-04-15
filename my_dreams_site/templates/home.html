@@ -1,6 +1,20 @@
 
-{% extends "base.html" %}
-{% block content %}
-<h2>Welcome to your Dreams Tracker!</h2>
-<p>Track your purchases and set your goals.</p>
-{% endblock %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+</head>
+<body>
+    <h1>Welcome to Your Financial Management App</h1>
+    <nav>
+        <a href="{{ url_for('add_purchase') }}">Add Purchase</a>
+        <a href="{{ url_for('goals') }}">Set Goals</a>
+        <a href="{{ url_for('add_contribution') }}">Add Contribution</a>
+        <a href="{{ url_for('income_distribution') }}">Income Distribution</a>
+        <a href="{{ url_for('expense_analysis') }}">Expense Analysis</a>
+        <a href="{{ url_for('logout') }}">Logout</a>
+    </nav>
+</body>
+</html>

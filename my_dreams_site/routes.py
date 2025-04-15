@@ -1,9 +1,10 @@
 
-from app import app, db, login_manager  # Импортируйте login_manager
-from flask import render_template, redirect, url_for, flash
+from app import app, db, login_manager  
+from flask import render_template, redirect, url_for, flash, request
 from flask_login import login_user, current_user, logout_user, login_required
-from forms import RegistrationForm, LoginForm, PurchaseForm, GoalForm
-from models import User, Purchase, Goal
+from forms import RegistrationForm, LoginForm, PurchaseForm, GoalForm, ContributionForm
+from models import User, Purchase, Goal, Contribution
+from datetime import datetime, timedelta
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -38,12 +39,12 @@ def login():
         if user and user.password == form.password.data:
             login_user(user)
             return redirect(url_for('home'))
-        else:
-            flash('Login Unsuccessful. Please check email and password', 'danger')
+        flash('Login Unsuccessful. Please check email and password', 'danger')
     return render_template('login.html', form=form)
 
 @app.route("/logout")
 def logout():
+
     logout_user()
     return redirect(url_for('home'))
 
@@ -70,3 +71,47 @@ def goals():
         flash('Goal set!', 'success')
         return redirect(url_for('goals'))
     return render_template('goals.html', form=form)
+
+@app.route("/add_contribution", methods=['GET', 'POST'])
+@login_required
+def add_contribution():
+    if request.method == 'POST':
+        amount = float(request.form['amount'])
+        new_contribution = Contribution(amount=amount, contributor=current_user)
+        db.session.add(new_contribution)
+        db.session.commit()
+        flash('Contribution added!', 'success')
+        return redirect(url_for('home'))
+    return render_template('add_contribution.html')
+
+@app.route("/goal_progress/<int:goal_id>", methods=['GET'])
+@login_required
+def goal_progress(goal_id):
+    goal = Goal.query.get_or_404(goal_id)
+    progress = (goal.current_amount / goal.target_amount) * 100 if goal.target_amount > 0 else 0
+    return render_template('goal_progress.html', progress=progress, goal=goal)
+
+@app.route("/expense_analysis", methods=['GET'])
+@login_required
+def expense_analysis():
+    last_month = datetime.now() - timedelta(days=30)
+    purchases_last_month = Purchase.query.filter(Purchase.owner == current_user, Purchase.timestamp >= last_month).all()
+    category_totals = {}
+    for purchase in purchases_last_month:
+        if purchase.category in category_totals:
+            category_totals[purchase.category] += purchase.amount
+        else:
+            category_totals[purchase.category] = purchase.amount
+    return render_template('expense_analysis.html', category_totals=category_totals)
+
+@app.route("/income_distribution", methods=['GET'])
+@login_required
+def income_distribution():
+    contributions = Contribution.query.filter_by(user_id=current_user.id).all()
+    total_income = sum(contribution.amount for contribution in contributions)
+    
+    savings = total_income * 0.20    # 20% на сбережения
+    consumption = total_income * 0.50  # 50% на потребление
+    dreams = total_income * 0.30      # 30% на мечты
+    
+    return render_template('income_distribution.html', total_income=total_income, savings=savings, consumption=consumption, dreams=dreams)
