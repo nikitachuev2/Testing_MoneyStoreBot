@@ -1,22 +1,8 @@
-
 import sqlite3
 import bcrypt
+from database import create_connection, create_tables
 
-DATABASE = 'users.db'
-
-def create_connection():
-    conn = sqlite3.connect(DATABASE)
-    return conn
-
-def create_table():
-    conn = create_connection()
-    cursor = conn.cursor()
-    cursor.execute('''CREATE TABLE IF NOT EXISTS users (
-                      id INTEGER PRIMARY KEY AUTOINCREMENT,
-                      email TEXT UNIQUE,
-                      password TEXT)''')
-    conn.commit()
-    conn.close()
+db= 'database.db'
 
 def register_user(email, password):
     conn = create_connection()
@@ -37,5 +23,3 @@ def authenticate_user(email, password):
         return True
     return False
 
-# Инициализация базы данных
-create_table()

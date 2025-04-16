@@ -1,4 +1,3 @@
-
 from telegram import Update
 from telegram.ext import ContextTypes
 from auth import register_user, authenticate_user
