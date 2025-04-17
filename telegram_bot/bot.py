@@ -1,45 +1,13 @@
 
 from telegram import Update, ReplyKeyboardMarkup
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
-from handlers import start, help_command, register, login, add_purchase, analyze_expenses, set_savings_ratio, set_dream, add_salary, show_pocket, show_dream
-from auth import register_user, authenticate_user, change_password  # Предполагается, что есть такая функция для смены пароля
+# from auth import register_user, authenticate_user, change_password  # Предполагается, что есть такая функция для смены пароля
+from auth import register_user, authenticate_user
+# from handlers import start, help_command, register, login, add_purchase, analyze_expenses, set_savings_ratio, set_dream, add_salary, show_pocket, show_dream
+from handlers import start, help_command, register, login
 
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    welcome_text = (
-        "Привет! Я ваш телеграм бот.\n"
-        "Я помогу вам управлять вашим бюджетом и достигать финансовых целей. "
-        "Вот некоторые команды, с которыми вы можете взаимодействовать:\n"
-    )
 
-    # Кнопки для взаимодействия
-    keyboard = [
-        ["/register", "/login"],
-        ["/add", "/analyze"],
-        ["/salary", "/pocket"],
-        ["/dream", "/show"],
-        ["/help"]
-    ]
-    reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
 
-    await update.message.reply_text(welcome_text, reply_markup=reply_markup)
-
-async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    help_text = (
-        "Вот список доступных команд:\n"
-        "/start - Приветствие\n"
-        "/help - Помощь\n"
-        "/register - Зарегистрироваться в системе\n"
-        "/login - Войти в систему\n"
-        "/add - Добавить покупку\n"
-        "/analyze - Анализ расходов\n"
-        "/salary - Добавить сумму к бюджету\n"
-        "/ratio - Установить распределение сбережений\n"
-        "/dream - Установить мечту\n"
-        "/show - Показать состояние мечты\n"
-        "/pocket - Показать остаток на потребление\n"
-    )
-    
-    await update.message.reply_text(help_text)
 
 async def add(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     # Логика добавления покупки
