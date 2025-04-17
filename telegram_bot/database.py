@@ -1,15 +1,23 @@
+
 import sqlite3
 
 DATABASE = 'database.db'
 
 def create_connection():
     """Создает подключение к базе данных SQLite."""
-    conn = sqlite3.connect(DATABASE)
-    return conn
+    try:
+        conn = sqlite3.connect(DATABASE)
+        return conn
+    except sqlite3.Error as e:
+        print(f"Ошибка подключения к базе данных: {e}")
+        return None
 
 def create_tables():
     """Создает необходимые таблицы в базе данных."""
     conn = create_connection()
+    if conn is None:
+        return  # Завершаем выполнение, если не удалось подключиться к базе данных
+
     cursor = conn.cursor()
 
     # Создание таблицы пользователей
@@ -44,7 +52,8 @@ def create_tables():
                       timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
                       FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE)''')
 
-    conn.commit()
-    conn.close()
+    conn.commit()  # Сохраняем изменения
+    conn.close()   # Закрываем соединение
 
-create_tables()
+if __name__ == '__main__':
+    create_tables()  # Создание таблиц при запуске скрипта

@@ -1,5 +1,6 @@
-from telegram import Update
-from telegram.ext import ContextTypes
+
+from telegram import Update, ReplyKeyboardMarkup
+from telegram.ext import ContextTypes, ApplicationBuilder, CommandHandler
 from auth import register_user, authenticate_user
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -7,22 +8,20 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         "Привет! Я ваш телеграм бот.\n"
         "Я помогу вам управлять вашим бюджетом и достигать финансовых целей. "
         "Вот некоторые команды, с которыми вы можете взаимодействовать:\n"
-        "/start - Приветственное сообщение\n"
-        "/help - Список всех доступных команд\n"
-        "/register - Регистрация нового пользователя\n"
-        "/login - Вход в систему\n"
-        "/add - Добавить покупку\n"
-        "/analyze - Анализ расходов\n"
-        "/salary - Добавить сумму к бюджету\n"
-        "/ratio - Установить распределение сбережений\n"
-        "/dream - Установить мечту\n"
-        "/show - Показать состояние мечты\n"
-        "/pocket - Показать остаток на потребление\n"
     )
-    await update.message.reply_text(welcome_text)
+
+    # Кнопки для взаимодействия
+    keyboard = [
+        ["/register", "/login"],
+        ["/help"]
+    ]
+    reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
+
+    await update.message.reply_text(welcome_text, reply_markup=reply_markup)
 
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     help_text = (
+        "Вот список доступных команд:\n"
         "/start - приветствие\n"
         "/help - список команд\n"
         "/register - регистрация пользователя\n"
@@ -38,19 +37,36 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
     await update.message.reply_text(help_text)
 
 async def register(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    if len(context.args) < 2:
+        await update.message.reply_text("Пожалуйста, укажите email и пароль.\nИспользуйте команду так: /register [email] [password]")
+        return
+    email, password = context.args[0], context.args[1]
     try:
-        email, password = context.args
-        register_user(email, password)
+        register_user(email, password)  # Ваша функция для регистрации
         await update.message.reply_text("Регистрация успешна! Вы можете войти с помощью /login.")
-    except ValueError:
-        await update.message.reply_text("Используйте команду так: /register [email] [password]")
+    except Exception as e:
+        await update.message.reply_text(f"Произошла ошибка при регистрации: {str(e)}")
 
 async def login(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    try:
-        email, password = context.args
-        if authenticate_user(email, password):
-            await update.message.reply_text("Вход успешен! Добро пожаловать.")
-        else:
-            await update.message.reply_text("Ошибка: Неправильный email или пароль.")
-    except ValueError:
-        await update.message.reply_text("Используйте команду так: /login [email] [password]")
+    if len(context.args) < 2:
+        await update.message.reply_text("Пожалуйста, укажите email и пароль.\nИспользуйте команду так: /login [email] [password]")
+        return
+    email, password = context.args[0], context.args[1]
+    if authenticate_user(email, password):  # Ваша функция для аутентификации
+        await update.message.reply_text("Вход успешен! Добро пожаловать.")
+    else:
+        await update.message.reply_text("Ошибка: Неправильный email или пароль.")
+
+# Основная функция для запуска бота
+def main():
+    application = ApplicationBuilder().token('YOUR_TELEGRAM_BOT_TOKEN').build()
+    application.add_handler(CommandHandler("start", start))
+    application.add_handler(CommandHandler("help", help_command))
+    application.add_handler(CommandHandler("register", register))
+    application.add_handler(CommandHandler("login", login))
+
+    application.run_polling()
+
+# Запуск бота при исполнении скрипта напрямую
+if __name__ == '__main__':
+    main()
