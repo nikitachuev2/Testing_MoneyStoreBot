@@ -1,3 +1,4 @@
+
 import random
 from telegram import Update, ReplyKeyboardMarkup, ReplyKeyboardRemove
 from telegram.ext import ContextTypes, ConversationHandler
@@ -32,4 +33,24 @@ async def handle_roulette_choice(update: Update, context: ContextTypes.DEFAULT_T
         result = f"❌ Вы выбрали {user_choice}. Увы, вы проиграли. Это было {outcome}."
 
     await update.message.reply_text(result, reply_markup=ReplyKeyboardRemove())
+    
+    # Заканчиваем разговор и создаем кнопку для возврата в главное меню
+    await return_to_main_menu(update, context)
+
     return ConversationHandler.END
+
+# Функция для возврата в главное меню
+async def return_to_main_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    keyboard = [
+        ["Регистрация", "Вход"],
+        ["Справка", "Текущая дата и время"],
+        ["Угадай число", "Случайный факт"],
+        ["Русская рулетка", "Денежный совет"],
+        ["Погода"]
+    ]
+    reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
+    
+    await update.message.reply_text(
+        "🔙 Произошел возврат в меню. Выберитке функцию при помощи кнопок",
+        reply_markup=reply_markup
+    )
